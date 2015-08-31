@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
@@ -10,6 +11,7 @@ import hfwwgDB
 class SightingForm(djangoforms.ModelForm):
     class Meta:
         model = hfwwgDB.Sighting
+        exclude = ['which_user']
 
 class SightingInputPage(webapp.RequestHandler):
     def get(self):
@@ -33,6 +35,7 @@ class SightingInputPage(webapp.RequestHandler):
         new_sighting.whale_type = self.request.get('whale_type')
         new_sighting.blow_type = self.request.get('blow_tipe')
         new_sighting.wave_type = self.request.get('wave_type')
+        new_sighting.which_user = users.get_current_user()
 
         new_sighting.put()
 
